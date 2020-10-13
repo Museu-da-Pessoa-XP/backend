@@ -2,7 +2,7 @@ from django.urls import path
 from museu import views
 
 urlpatterns = [
-    path('user/', views.user_list),
-    path('historia/', views.historia_list),
-    path('upload/', views.upload_list),
+    path('user/', views.UserDetails.as_view()),
+    path('historia/', views.HistoriaDetails.as_view()),
+    path('upload/', views.UploadDetails.as_view()),
 ]

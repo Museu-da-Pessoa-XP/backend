@@ -1,49 +1,67 @@
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.views import APIView
-from rest_framework.response import Response
+from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from .models import User, Historia, Upload
 from .serializers import UserSerializer, HistoriaSerializer, UploadSerializer
+import json
 
-class UserDetails(APIView):
+class UserView(APIView):
     def get(self, request, format=None):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
-        return Response(serializer.data)
+        return JsonResponse(serializer.data, safe = False)
 
-    def set(self, request, format=None):
-        data = JSONParser().parse(request)
-        serializer = UserSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, format=None):
+        try:
+            dados = json.loads(request.data['data'])
+            user = User.objects.create(
+                nome = dados[0]["nome"],
+                email = dados[0]["email"],
+            )
+            serializer = UserSerializer(user)
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, safe=False)
+        except Exception as e:
+            print(e)
+            return JsonResponse("", safe=False)
 
-class HistoriaDetails(APIView):
+class HistoriaView(APIView):
     def get(self, request, format=None):
         historias = Historia.objects.all()
         serializer = HistoriaSerializer(historias, many=True)
-        return Response(serializer.data)
+        return JsonResponse(serializer.data, safe = False)
 
-    def set(self, request, format=None):
-        data = JSONParser().parse(request)
-        serializer = HistoriaSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, format=None):
+        try:
+            dados = json.loads(request.data['data'])
+            user = User.objects.get(nome=dados[0]["usuario"])
+            historia = Historia.objects.create(
+                nome = dados[0]["nome"],
+                localizacao = dados[0]["localizacao"],
+                usuario = user,
+            )
+            serializer = HistoriaSerializer(historia)
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, safe=False)
+        except Exception as e:
+            print(e)
+            return JsonResponse("", safe=False)
 
-class UploadDetails(APIView):
+class UploadView(APIView):
     def get(self, request, format=None):
         uploads = Upload.objects.all()
         serializer = UploadSerializer(uploads, many=True)
-        return Response(serializer.data)
+        return JsonResponse(serializer.data, safe = False)
 
-    def set(self, request, format=None):
-        data = JSONParser().parse(request)
-        serializer = UploadSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, format=None):
+        try:
+            dados = json.loads(request.data['data'])
+            upload = Upload.objects.create(
+                uploaded_at=dados[0]["uploaded_at"],
+                file=dados[0]["file"],
+            )
+            serializer = UploadSerializer(upload)
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, safe=False)
+        except Exception as e:
+            print(e)
+            return JsonResponse("", safe = False)

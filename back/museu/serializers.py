@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from museu.models import User, Historia, Upload
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -10,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 class HistoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Historia
-        fields = ['nome', 'usuario']
+        fields = ['nome', 'localizacao', 'usuario']
 
 class UploadSerializer(serializers.ModelSerializer):
     class Meta:

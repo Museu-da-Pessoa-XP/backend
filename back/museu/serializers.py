@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 class HistoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Historia
-        fields = ['nome', 'usuario']
+        fields = ['nome', 'localizacao', 'usuario']
 
 class UploadSerializer(serializers.ModelSerializer):
     class Meta:

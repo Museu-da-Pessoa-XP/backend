@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from museu.models import User, Historia, Upload
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

@@ -1,4 +1,6 @@
+
 from rest_framework import serializers
+
 from .models import User, Historia
 
 
@@ -12,3 +14,4 @@ class HistoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Historia
         fields = ['name', 'location', 'user']
+

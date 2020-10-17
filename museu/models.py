@@ -1,7 +1,5 @@
 
 from django.db import models
-
-
 USER_MAX_LENGTH = 30
 
 

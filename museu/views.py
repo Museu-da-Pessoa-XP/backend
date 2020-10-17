@@ -1,11 +1,8 @@
 import json
-import hashlib
-
 import boto3
 from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 
 from backend.settings import AWS_STORAGE_BUCKET_NAME
@@ -32,6 +29,7 @@ class UserView(APIView):
     def post(self, request, format=None):
         try:
             data = json.loads(request.body)['data']
+
             user = User.objects.create(
                 name=data["name"],
                 email=data["email"],
@@ -43,7 +41,6 @@ class UserView(APIView):
 
 
 class HistoriaView(APIView):
-
     parser_classes = [MultiPartParser, FormParser]
     file_type = {
         'text': TEXT_FILE_TYPE,

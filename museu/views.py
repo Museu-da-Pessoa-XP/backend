@@ -14,11 +14,11 @@ class UserView(APIView):
     def get(self, request, format=None):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
 
     def post(self, request, format=None):
         try:
-            data = json.loads(request.data['data'])
+            data = json.loads(request.body)['data']
             user = User.objects.create(
                 name=data["name"],
                 email=data["email"],
@@ -34,11 +34,11 @@ class HistoriaView(APIView):
     def get(self, request, format=None):
         historias = Historia.objects.all()
         serializer = HistoriaSerializer(historias, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
 
     def post(self, request, format=None):
         try:
-            data = json.loads(request.data['data'])
+            data = json.loads(request.body)['data']
             user = User.objects.get(id=data["user_id"])
             historia = Historia.objects.create(
                 name=data["name"],

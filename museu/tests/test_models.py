@@ -3,7 +3,7 @@ import random
 import string
 
 from django.test import TestCase
-from .models import User, USER_MAX_LENGTH
+from museu.models import User, USER_MAX_LENGTH
 
 
 def get_random_string(length):
@@ -30,3 +30,11 @@ class UserTestCase(TestCase):
         for i in range(len(users)):
             self.assertEqual(users[i].name, self.user_names[i])
             self.assertEqual(users[i].email, self.emails[i])
+
+class HistoriaTestCase(TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_historia_model(self):
+        pass

@@ -9,10 +9,6 @@ from rest_framework.test import APIRequestFactory
 
 from museu.views import HistoriaView, UserView
 
-URL_HISTORIA = 'http://127.0.0.1:8000/historia/'
-HEADERS = {'content-type': 'application/json'}
-EMAIL = '@email.com'
-
 
 def get_random_string(length):
 	letters = string.ascii_lowercase
@@ -24,6 +20,8 @@ class HistoriaAPITestCase(TestCase):
 
 	def setUp(self):
 		self.historias = []
+		email_suffix = '@email.com'
+
 		user_factory = APIRequestFactory()
 		u = UserView()
 		num = random.randint(10, 20)
@@ -33,7 +31,7 @@ class HistoriaAPITestCase(TestCase):
 			user = {
 				"data": {
 					"name": user_name,
-					"email": get_random_string(random.randint(5, 10)) + EMAIL
+					"email": get_random_string(random.randint(5, 10)) + email_suffix
 				}
 			}
 			r = user_factory.post('/user/', user, format='json')

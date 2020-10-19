@@ -9,10 +9,6 @@ from rest_framework.test import APIRequestFactory
 
 from museu.views import UserView
 
-URL_USER = 'http://127.0.0.1:8000/user/'
-HEADERS = {'content-type': 'application/json'}
-EMAIL = '@email.com'
-
 
 def get_random_string(length):
     letters = string.ascii_lowercase
@@ -24,12 +20,13 @@ class UserAPITestCase(TestCase):
 
     def setUp(self):
         self.users = []
+        email_suffix = '@email.com'
         num_users = random.randint(10, 20)
         for i in range(num_users):
             self.users.append({
                 "data": {
                     "name": get_random_string(random.randint(10, 20)),
-                    "email": get_random_string(random.randint(5, 10)) + EMAIL
+                    "email": get_random_string(random.randint(5, 10)) + email_suffix
                 }
             })
 

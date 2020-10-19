@@ -30,9 +30,21 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 3e47966ab167        postgres            "docker-entrypoint.s…"   7 seconds ago       Up 5 seconds        0.0.0.0:5432->5432/tcp          database
 ```
 
-## Access the application
-<p>Open your web-browser (firefox, chrome) on URL: <a href="http://localhost:8080">http://localhost:8080</a></p>
-<p>Use the follow credentials:
-- User: diego.morais@usp.br
-- Password: Museu@2020
- </p>
+## Access the database administration
+<p>If you want to o view/edit the database, configure a new connection on <b>PgAdmin</b>:</p>
+
+- Open your web-browser (firefox, chrome) on URL: <a href="http://localhost:8080">http://localhost:8080</a>
+- Use the follow credentials:
+  - <b>User:</b> diego.morais@usp.br
+  - <b>Password:</b> Museu@2020 
+- Righ click on <b>Servers</b>, Create > Server...
+- Fill the <b>General</b> tab with the follow information:
+  - <b>Name:</b> Museu-database
+  - Fill the <b>Connection</b> tab with the follow information:
+  - <b>Host:</b> database
+  - <b>Port:</b> 5432
+  - <b>Maintenance database:</b> postgres
+  - <b>Username:</b> postgres
+  - <b>Password:</b> Museu@2020
+- Click on <b>Save</b>
+ 

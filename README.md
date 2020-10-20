@@ -6,11 +6,11 @@ sudo apt-get update
 sudo apt-get install docker
 sudo apt-get install docker-compose
 ```
-## Clone backend repository and changing to the right branch
+## Clone backend repository and change to the right branch
 ```shell
 git clone https://github.com/Museu-da-Pessoa-XP/backend.git
 cd backend
-git checkout devekop
+git checkout develop
 git pull
 ```
 

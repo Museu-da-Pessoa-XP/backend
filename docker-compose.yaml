@@ -1,10 +1,40 @@
-version: "3"
-   
+version: '3'
+
 services:
-  web:
+  database:
+    image: postgres
+    container_name: database    
+    environment:
+      POSTGRES_PASSWORD: "Museu@2020"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - database-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "diego.morais@usp.br"
+      PGADMIN_DEFAULT_PASSWORD: "Museu@2020"
+    ports:
+      - "8080:80"
+    depends_on:
+      - database
+    networks:
+      - database-network
+
+  backend:
     build: .
-    command: bash -c " python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    container_name: backend
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:
-      - "8000:8000"
+      - "8000:8000"  
+
+networks: 
+  database-network:
+    driver: bridge

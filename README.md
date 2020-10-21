@@ -1,4 +1,6 @@
-# Backend - Postgres
+# Museu da Pessoa Backend 
+
+The Museu da Pessoa backend is part of the Museu da Pessoa project and is responsible for saving the users' data such as name, email, text, audio and video
 
 ## Install docker on Linux (ubuntu flavors)
 ```shell
@@ -10,7 +12,7 @@ sudo apt-get install docker-compose
 ```shell
 git clone https://github.com/Museu-da-Pessoa-XP/backend.git
 cd backend
-git checkout devekop
+git checkout develop
 git pull
 ```
 
@@ -23,12 +25,19 @@ docker-compose up -d
 ```shell
 docker ps
 ```
-You must have 2 containers running, like this:
+You must have 3 containers running, just like this:
 ```shell
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                           NAMES
-7ae2b4012dd5        dpage/pgadmin4      "/entrypoint.sh"         5 seconds ago       Up 4 seconds        443/tcp, 0.0.0.0:8080->80/tcp   pgadmin
-3e47966ab167        postgres            "docker-entrypoint.s…"   7 seconds ago       Up 5 seconds        0.0.0.0:5432->5432/tcp          database
+0e236fff79a3        dpage/pgadmin4      "/entrypoint.sh"         3 seconds ago       Up 2 seconds        443/tcp, 0.0.0.0:8080->80/tcp   pgadmin
+3078fe719194        backend_backend     "bash -c 'python3 ma…"   3 seconds ago       Up 2 seconds        0.0.0.0:8000->8000/tcp          backend
+62a51038295c        postgres            "docker-entrypoint.s…"   3 seconds ago       Up 2 seconds        0.0.0.0:5432->5432/tcp          database
 ```
+
+## Using Django administration
+1. Create a superuser on Django, as explained [here.](https://docs.djangoproject.com/en/1.8/intro/tutorial02/#creating-an-admin-user)
+2. Log into the [Django administration](http://127.0.0.1:8000/admin/login/?next=/admin/) by using the superuser you created.  
+3. Now you can create, edit and remove user and historia objects.  
+
 
 ## Access the database administration
 <p>If you want to o view/edit the database, configure a new connection on <b>PgAdmin</b>:</p>
@@ -47,25 +56,3 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
   - <b>Username:</b> postgres
   - <b>Password:</b> Museu@2020
 - Click on <b>Save</b>
- 
-# Museu da Pessoa Backend 
-
-The Museu da Pessoa backend is part of the Museu da Pessoa project and is responsible for saving the users' data such as name, email, text, audio and video
-
-## Installation
-1. Download the Museu da Pessoa backend repository: ```https://github.com/Museu-da-Pessoa-XP/backend.git```
-
-2. On the terminal, access the repository directory: ```cd backend```
-
-3. Run ```pip3 install -r requirements.txt```
-
-4. Execute ```python3 manage.py makemigrations``` and ```python3 manage.py migrate```
-
-In order to run the project, execute ```python3 manage.py runserver```
-
-## Using as an administrator
-2. Create a superuser on Django, as explained [here.](https://docs.djangoproject.com/en/1.8/intro/tutorial02/#creating-an-admin-user)
-
-3. Log into the [Django administration](http://127.0.0.1:8000/admin/login/?next=/admin/) by using the superuser you created.  
-
-4. Now you can create, edit and remove user and historia objects.  

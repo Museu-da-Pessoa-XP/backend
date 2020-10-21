@@ -1,4 +1,4 @@
-"""museubackend URL Configuration
+"""backend URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.1/topics/http/urls/
@@ -15,7 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
+from museu import views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('user/', views.UserView.as_view()),
+    path('historia/', views.HistoriaView.as_view()),
 ]
+urlpatterns = format_suffix_patterns(urlpatterns)

@@ -1,4 +1,8 @@
+<<<<<<< HEAD:backend/urls.py
 """back URL Configuration
+=======
+"""backend URL Configuration
+>>>>>>> 6cbaf4b968db735e3f49e59266bd92c9cd525eec:museubackend/museubackend/urls.py
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -24,4 +28,8 @@ urlpatterns = [
     path('user/', views.UserView.as_view()),
     path('historia/', views.HistoriaView.as_view()),
 ]
+<<<<<<< HEAD:backend/urls.py
 urlpatterns = format_suffix_patterns(urlpatterns)
+=======
+urlpatterns = format_suffix_patterns(urlpatterns)
+>>>>>>> 6cbaf4b968db735e3f49e59266bd92c9cd525eec:museubackend/museubackend/urls.py

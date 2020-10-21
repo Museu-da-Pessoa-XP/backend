@@ -1,9 +1,11 @@
+import json
+
+from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
-from django.http.response import JsonResponse
+
 from museu.models import User, Historia
 from museu.serializers import UserSerializer, HistoriaSerializer
-import json
 
 
 class UserView(APIView):

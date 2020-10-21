@@ -1,3 +1,4 @@
+
 import json
 
 from django.http.response import JsonResponse
@@ -9,6 +10,7 @@ from museu.serializers import UserSerializer, HistoriaSerializer
 
 
 class UserView(APIView):
+
     def get(self, request, format=None):
         users = User.objects.all()
         serializer = UserSerializer(users, many=True)
@@ -28,6 +30,7 @@ class UserView(APIView):
 
 
 class HistoriaView(APIView):
+
     def get(self, request, format=None):
         historias = Historia.objects.all()
         serializer = HistoriaSerializer(historias, many=True)

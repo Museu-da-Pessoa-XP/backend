@@ -1,6 +1,6 @@
+
 import random
 import string
-
 
 from django.test import TestCase
 from .models import User, USER_MAX_LENGTH

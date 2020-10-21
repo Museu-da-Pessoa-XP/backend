@@ -1,14 +1,10 @@
 """
-<<<<<<< HEAD:backend/wsgi.py
-WSGI config for back project.
-=======
 WSGI config for backend project.
->>>>>>> 6cbaf4b968db735e3f49e59266bd92c9cd525eec:museubackend/museubackend/wsgi.py
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/2.2/howto/deployment/wsgi/
+https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/
 """
 
 import os

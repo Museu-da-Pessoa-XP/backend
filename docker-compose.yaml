@@ -2,7 +2,7 @@ version: '3'
 
 services:
   database:
-    image: postgres
+    image: postgres:13
     container_name: database    
     environment:
       POSTGRES_PASSWORD: "Museu@2020"
@@ -14,7 +14,7 @@ services:
       - database-network
 
   pgadmin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:4
     container_name: pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: "diego.morais@usp.br"

@@ -5,7 +5,9 @@ services:
     image: postgres:13
     container_name: database    
     environment:
-      POSTGRES_PASSWORD: "Museu@2020"
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=renan
+      - POSTGRES_PASSWORD=Museu@2020  
     ports:
       - "5432:5432"
     volumes:
@@ -35,7 +37,9 @@ services:
     ports:
       - "8000:8000"
     networks:
-      - database-network      
+      - database-network
+    depends_on:
+      - database
 
 networks: 
   database-network:

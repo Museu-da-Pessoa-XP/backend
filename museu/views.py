@@ -1,4 +1,3 @@
-
 import json
 
 from django.http.response import JsonResponse
@@ -38,14 +37,13 @@ class HistoriaView(APIView):
 
     def post(self, request, format=None):
         try:
-            data = json.loads(request.body)['data']
-            user = User.objects.get(id=data["user_id"])
+            data = json.loads(request.body)
             historia = Historia.objects.create(
-                name=data["name"],
-                location=data["location"],
-                user=user,
+                title=data["title"],
+                description=data["description"],
+                type=data["type"]
             )
             serializer = HistoriaSerializer(historia)
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, safe=False)
+            return JsonResponse(data, status=status.HTTP_201_CREATED, safe=False)
         except Exception as e:
             raise e

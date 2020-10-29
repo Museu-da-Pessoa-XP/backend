@@ -11,6 +11,16 @@ class User(models.Model):
 
 
 class Historia(models.Model):
-    name = models.CharField(max_length=30)
-    location = models.CharField(max_length=255)
-    user = models.ForeignKey(User, default=None, on_delete=models.DO_NOTHING)
+    title = models.CharField(
+        max_length=140,
+        default='Titulo lindo'
+    )
+    description = models.CharField(
+        max_length=280,
+        default='Uma bela descrição'
+    )
+    type = models.CharField(
+        max_length=5,
+        default='text'
+    )
+    # media = models.BinaryField(default=b'umaimagembembonita')

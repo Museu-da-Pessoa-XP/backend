@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'museu.apps.MuseuConfig',
+    'museu.apps.MuseuConfig'
 ]
 
 MIDDLEWARE = [
@@ -132,3 +132,8 @@ CORS_ORIGIN_WHITELIST = (
     'http://localhost:8000',
     'http://localhost:3000',
 )
+
+# S3 Configurations
+AWS_STORAGE_BUCKET_NAME = 'upload-test-django'
+AWS_ACCESS_KEY_ID = 'AKIAJVHSPWPZS6GALWTQ'
+AWS_SECRET_ACCESS_KEY = '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'

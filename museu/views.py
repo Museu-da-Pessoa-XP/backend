@@ -48,6 +48,8 @@ class HistoriaView(APIView):
         'video': VIDEO_FILE_TYPE
     }
 
+    parser_classes = [MultiPartParser, FormParser]
+
     def get(self, request, format=None):
         historias = Historia.objects.all()
         serializer = HistoriaSerializer(historias, many=True)
@@ -77,6 +79,7 @@ class HistoriaView(APIView):
             return JsonResponse(serializer.data, status=status_code, safe=False)
 
         except Exception as e:
+            print(e)
             raise e
 
     def upload_to_s3(self, data, s3_folder_path, media_filename):

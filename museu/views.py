@@ -15,8 +15,13 @@ from museu.serializers import UserSerializer, HistoriaSerializer
 _S3 = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
                      aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
 _S3_client = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
-                     aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+                          aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+
 BASE_PATH = 'uploads/'
+JSON_FILE_TYPE = '.json'
+TEXT_FILE_TYPE = '.txt'
+AUDIO_FILE_TYPE = '.mp3'
+VIDEO_FILE_TYPE = '.mp4'
 
 
 class UserView(APIView):
@@ -42,6 +47,11 @@ class UserView(APIView):
 class HistoriaView(APIView):
 
     parser_classes = [MultiPartParser, FormParser]
+    file_type = {
+        'text': TEXT_FILE_TYPE,
+        'audio': AUDIO_FILE_TYPE,
+        'video': VIDEO_FILE_TYPE
+    }
 
     def get(self, request, format=None):
         historias = Historia.objects.all()
@@ -50,18 +60,11 @@ class HistoriaView(APIView):
 
     def post(self, request, format=None):
         try:
+            data = request.data
 
-            data = {
-                'title': request.data['title'],
-                'description': request.data['description'],
-                'type': request.data['type'],
-                'media': request.data['media']
-            }
-
-            file_type = data['title'] + '.json'
-            media_type = 'video.mp4'
-
-            path = BASE_PATH + data['title'] + '/'
+            info_filename = data['title'] + JSON_FILE_TYPE
+            media_filename = data['title'] + self.file_type[data['type']]
+            s3_folder_path = BASE_PATH + data['title'] + '/'
 
             historia = Historia.objects.create(
                 title=data["title"],
@@ -71,12 +74,16 @@ class HistoriaView(APIView):
             )
 
             serializer = HistoriaSerializer(historia)
-            s3object = _S3.Object(AWS_STORAGE_BUCKET_NAME, path+file_type)
-            s3object.put(
-                Body=(JSONRenderer().render(serializer.data))
-            )
-            s3object_media = _S3_client.upload_fileobj(data['media'], AWS_STORAGE_BUCKET_NAME, path+media_type)
+            self.upload_to_s3(data, s3_folder_path, info_filename, media_filename, serializer)
+
             return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, safe=False)
         except Exception as e:
-            print(e)
             raise e
+
+    def upload_to_s3(self, data, s3_folder_path, info_filename, media_filename, serializer):
+        s3object = _S3.Object(AWS_STORAGE_BUCKET_NAME, s3_folder_path + info_filename)
+        s3object.put(
+            Body=(JSONRenderer().render(serializer.data))
+        )
+        s3object_media = _S3_client.upload_fileobj(data['media'], AWS_STORAGE_BUCKET_NAME,
+                                                   s3_folder_path + media_filename)

@@ -61,29 +61,27 @@ class HistoriaView(APIView):
     def post(self, request, format=None):
         try:
             data = request.data
-
-            info_filename = data['title'] + JSON_FILE_TYPE
             media_filename = data['title'] + self.file_type[data['type']]
             s3_folder_path = BASE_PATH + data['title'] + '/'
+            status_code = self.upload_to_s3(data, s3_folder_path, media_filename)
+            if not status.is_success(status_code):
+                return JsonResponse('error', status=status.HTTP_500_INTERNAL_SERVER_ERROR, safe=False)
 
             historia = Historia.objects.create(
                 title=data["title"],
                 description=data["description"],
                 type=data["type"],
-                # media=data["media"]
+                media_url=s3_folder_path + media_filename
             )
 
             serializer = HistoriaSerializer(historia)
-            self.upload_to_s3(data, s3_folder_path, info_filename, media_filename, serializer)
+            return JsonResponse(serializer.data, status=status_code, safe=False)
 
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, safe=False)
         except Exception as e:
             raise e
 
-    def upload_to_s3(self, data, s3_folder_path, info_filename, media_filename, serializer):
-        s3object = _S3.Object(AWS_STORAGE_BUCKET_NAME, s3_folder_path + info_filename)
-        s3object.put(
-            Body=(JSONRenderer().render(serializer.data))
-        )
-        s3object_media = _S3_client.upload_fileobj(data['media'], AWS_STORAGE_BUCKET_NAME,
-                                                   s3_folder_path + media_filename)
+    def upload_to_s3(self, data, s3_folder_path, media_filename):
+        s3object = _S3.Object(AWS_STORAGE_BUCKET_NAME, s3_folder_path + media_filename)
+        put_metadata = s3object.put(Body=(data['media']))
+        response_code = put_metadata['ResponseMetadata']['HTTPStatusCode']
+        return response_code

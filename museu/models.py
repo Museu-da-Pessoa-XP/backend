@@ -23,4 +23,4 @@ class Historia(models.Model):
         max_length=5,
         default='text'
     )
-    # media = models.BinaryField(default=b'umaimagembembonita')
+    # media = models.FileField(default=b'video')

@@ -13,5 +13,5 @@ class UserSerializer(serializers.ModelSerializer):
 class HistoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Historia
-        fields = ['name', 'location', 'user']
+        fields = ['title', 'description', 'type']
 

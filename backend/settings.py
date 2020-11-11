@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
-    'museu.apps.MuseuConfig'
+    'museu.apps.MuseuConfig',
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -81,12 +82,18 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'renan',
+        'PASSWORD': 'Museu@2020',
+        'HOST': 'database',
+        'PORT': 5432,
     }
 }
+
 
 
 # Password validation

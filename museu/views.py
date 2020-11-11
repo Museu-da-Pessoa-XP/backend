@@ -65,7 +65,7 @@ class HistoriaView(APIView):
             if len(media_filename_extension) <= 1:
                 return JsonResponse('file is empty', status=status.HTTP_500_INTERNAL_SERVER_ERROR, safe=False)
 
-            media_filename = data['title'] + media_filename_extension
+            media_filename = data['title'] + '.' + media_filename_extension
             s3_folder_path = BASE_PATH + data['title'] + '/'
             status_code = self.upload_to_s3(data, s3_folder_path, media_filename)
             if not status.is_success(status_code):

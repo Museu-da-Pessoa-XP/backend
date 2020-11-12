@@ -19,7 +19,8 @@ class Historia(models.Model):
     )
     type = models.CharField(
         max_length=5,
-        default='text'
+        default='text',
+        validators=[validate_historia_type]
     )
     media_url = models.CharField(
         max_length=2048,

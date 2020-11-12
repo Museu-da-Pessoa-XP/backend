@@ -1,69 +1,51 @@
 
 import json
 import random
-import string
-import requests
+from io import BytesIO
 
 from django.test import TestCase
-from rest_framework.test import APIRequestFactory
+from rest_framework import status
+from rest_framework.test import APIClient
 
-from museu.views import HistoriaView, UserView
+from museu.views import HistoriaView
+from museu.tests.utils import create_historias_data
 
-
-def get_random_string(length):
-	letters = string.ascii_lowercase
-	result_str = ''.join(random.choice(letters) for i in range(length))
-	return result_str
+TEST_PATH = 'tests/'
 
 
 class HistoriaAPITestCase(TestCase):
 
 	def setUp(self):
 		self.historias = []
-		email_suffix = '@email.com'
+		num_historias = random.randint(10, 20)
 
-		user_factory = APIRequestFactory()
-		u = UserView()
-		num = random.randint(10, 20)
+		file = BytesIO(b'Test File content')
+		file.seek(0)
 
-		for i in range(num):
-			user_name = get_random_string(random.randint(10, 20))
-			user = {
-				"data": {
-					"name": user_name,
-					"email": get_random_string(random.randint(5, 10)) + email_suffix
-				}
-			}
-			r = user_factory.post('/user/', user, format='json')
-			_ = u.post(r)
-
-		users = json.loads(u.get('').content)
-		for user in users:
+		titles, descriptions, types, media_urls = create_historias_data(num_historias)
+		for title, description, htype, media in zip(titles, descriptions, types, media_urls):
 			self.historias.append({
-				"data": {
-					"name": user['name'],
-					"location": get_random_string(random.randint(10, 20)),
-					"user_id": user['id']
-				}
+				"title": title,
+				"description": description,
+				"type": htype,
+				"media": file
 			})
 
 	def test_get(self):
-		factory = APIRequestFactory()
+		api_client = APIClient()
 		hv = HistoriaView()
 		for historia in self.historias:
-			r = factory.post('/historia/', historia, format='json')
-			_ = hv.post(r)
+			api_client.post('/historia/', data=historia, format='multipart')
+
 		historias = json.loads(hv.get('').content)
 		for hist_from_get, hist_inserted in zip(historias, self.historias):
-			hist_inserted = hist_inserted['data']
-			self.assertEqual(hist_from_get['name'], hist_inserted['name'])
-			self.assertEqual(hist_from_get['location'], hist_inserted['location'])
-			self.assertEqual(hist_from_get['user'], hist_inserted['user_id'])
+			self.assertEqual(hist_from_get['title'], hist_inserted['title'])
+			self.assertEqual(hist_from_get['description'], hist_inserted['description'])
+			self.assertEqual(hist_from_get['type'], hist_inserted['type'])
+			# self.assertEqual(hist_from_get['media'], hist_inserted['media_url'])
 
 	def test_post(self):
-		factory = APIRequestFactory()
+		api_client = APIClient()
 		for historia in self.historias:
-			r = factory.post('/historia/', historia, format='json')
-			hv = HistoriaView()
-			res = hv.post(r)
-			self.assertEqual(res.status_code, requests.status_codes.codes.created)
+			response = api_client.post('/historia/', data=historia, format='multipart')
+			self.assertEqual(status.is_success(response.status_code), True)

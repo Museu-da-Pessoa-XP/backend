@@ -43,11 +43,6 @@ class UserView(APIView):
 
 class HistoriaView(APIView):
     parser_classes = [MultiPartParser, FormParser]
-    file_type = {
-        'text': TEXT_FILE_TYPE,
-        'audio': AUDIO_FILE_TYPE,
-        'video': VIDEO_FILE_TYPE
-    }
 
     parser_classes = [MultiPartParser, FormParser]
 
@@ -56,7 +51,7 @@ class HistoriaView(APIView):
         serializer = HistoriaSerializer(historias, many=True)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
 
-    def post(self, request, format=None):
+    def post(self, request, format=None, base_path=BASE_PATH):
         try:
             data = request.data
             media_filename_extension = data['media'].content_type.split('/')[1]
@@ -64,7 +59,8 @@ class HistoriaView(APIView):
                 return JsonResponse('file is empty', status=status.HTTP_500_INTERNAL_SERVER_ERROR, safe=False)
 
             media_filename = data['title'] + '.' + media_filename_extension
-            s3_folder_path = BASE_PATH + data['title'] + '/'
+            s3_folder_path = base_path + data['title'] + '/'
+
             status_code = self.upload_to_s3(data, s3_folder_path, media_filename)
             if not status.is_success(status_code):
                 return JsonResponse('error', status=status.HTTP_500_INTERNAL_SERVER_ERROR, safe=False)

@@ -20,7 +20,6 @@ from .router import router
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', views.UserView.as_view()),
     path('historia/', views.HistoriaView.as_view()),
     path('api/', include(router.urls))
 ]

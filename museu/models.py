@@ -13,7 +13,7 @@ class User(models.Model):
 class Historia(models.Model):
     title = models.CharField(
         max_length=140,
-        default='Titulo lindo'
+        default='Um lindo título'
     )
     description = models.CharField(
         max_length=280,
@@ -23,4 +23,7 @@ class Historia(models.Model):
         max_length=5,
         default='text'
     )
-    # media = models.BinaryField(default=b'umaimagembembonita')
+    media_url = models.CharField(
+        max_length=2048,
+        default=''
+    )

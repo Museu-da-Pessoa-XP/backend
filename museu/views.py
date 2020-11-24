@@ -8,14 +8,12 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 
-from backend.settings import AWS_STORAGE_BUCKET_NAME, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+from backend.settings import AWS_STORAGE_BUCKET_NAME
 from museu.models import User, Historia
 from museu.serializers import UserSerializer, HistoriaSerializer
 
-_S3 = boto3.resource('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
-                     aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
-_S3_client = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID,
-                          aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+_S3 = boto3.resource('s3')
+_S3_client = boto3.client('s3')
 
 BASE_PATH = 'uploads/'
 JSON_FILE_TYPE = '.json'

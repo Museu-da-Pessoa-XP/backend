@@ -15,6 +15,13 @@ cd backend
 git checkout develop
 git pull
 ```
+## Set AWS credentials as local environment variables 
+```shell
+export AWS_ACCESS_KEY_ID={key_id}
+export AWS_SECRET_ACCESS_KEY={access_key}
+```
+Replace _{key_id}_ and _{access_key}_ with the respective keys. 
+
 
 ## Start the Postgres and PGAdmin
 ```shell

@@ -83,7 +83,8 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASE_NAME = os.getenv('DATABASE_NAME','postgres')
+# DATABASE_NAME = os.getenv('DATABASE_NAME','postgres')
+DATABASE_NAME = 'postgres'
 DATABASE_USER = os.getenv('DATABASE_USER','renan')
 DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD','Museu@2020')
 DATABASE_HOST = os.getenv('DATABASE_HOST','database')

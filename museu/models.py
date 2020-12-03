@@ -1,5 +1,8 @@
 
 from django.db import models
+
+from museu.validators import validate_historia_type
+
 USER_MAX_LENGTH = 30
 
 

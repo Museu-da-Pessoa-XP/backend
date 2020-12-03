@@ -147,7 +147,7 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 # S3 Configurations
-AWS_STORAGE_BUCKET_NAME = 'historias-museu'
+AWS_STORAGE_BUCKET_NAME = 'upload-test-django'
 
 # Memory limits
 DATA_UPLOAD_MAX_MEMORY_SIZE = 100242880

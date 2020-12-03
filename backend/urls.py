@@ -22,8 +22,7 @@ from .router import router
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', views.UserView.as_view()),
-    path('historia/', views.HistoriaView.as_view()),
+    path('historia/', views.AppView.as_view()),
     path('api/',include(router.urls))
 ]
 #urlpatterns = format_suffix_patterns(urlpatterns)

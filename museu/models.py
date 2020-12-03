@@ -5,9 +5,9 @@ USER_MAX_LENGTH = 30
 
 
 class User(models.Model):
-    name = models.CharField(max_length=USER_MAX_LENGTH)
-    email = models.EmailField(max_length=254)
-    telephone = models.CharField(max_length=15)
+    name = models.CharField(max_length=USER_MAX_LENGTH, default='')
+    email = models.EmailField(max_length=254, default='')
+    telephone = models.CharField(max_length=15, default='')
 
 
 class Tag(models.Model):

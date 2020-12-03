@@ -2,6 +2,8 @@
 
 The Museu da Pessoa backend is part of the Museu da Pessoa project and is responsible for saving the users' data such as name, email, text, audio and video
 
+[![Build Status](https://travis-ci.org/Museu-da-Pessoa-XP/backend.svg?branch=develop)](https://travis-ci.org/Museu-da-Pessoa-XP/backend)
+
 ## Install docker on Linux (ubuntu flavors)
 ```shell
 sudo apt-get update

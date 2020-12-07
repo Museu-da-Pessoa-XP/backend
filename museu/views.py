@@ -1,11 +1,9 @@
-import json
-import hashlib
 
+import json
 import boto3
 from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.renderers import JSONRenderer
 from rest_framework.views import APIView
 
 from backend.settings import AWS_STORAGE_BUCKET_NAME
@@ -32,6 +30,7 @@ class UserView(APIView):
     def post(self, request, format=None):
         try:
             data = json.loads(request.body)['data']
+
             user = User.objects.create(
                 name=data["name"],
                 email=data["email"],
@@ -43,13 +42,9 @@ class UserView(APIView):
 
 
 class HistoriaView(APIView):
+    parser_classes = [MultiPartParser, FormParser]
 
     parser_classes = [MultiPartParser, FormParser]
-    file_type = {
-        'text': TEXT_FILE_TYPE,
-        'audio': AUDIO_FILE_TYPE,
-        'video': VIDEO_FILE_TYPE
-    }
 
     def get(self, request, format=None):
         historias = Historia.objects.all()
@@ -65,6 +60,7 @@ class HistoriaView(APIView):
 
             media_filename = data['title'] + '.' + media_filename_extension
             s3_folder_path = BASE_PATH + data['title'] + '/'
+
             status_code = self.upload_to_s3(data, s3_folder_path, media_filename)
             if not status.is_success(status_code):
                 return JsonResponse('error', status=status.HTTP_500_INTERNAL_SERVER_ERROR, safe=False)
@@ -80,6 +76,7 @@ class HistoriaView(APIView):
             return JsonResponse(serializer.data, status=status_code, safe=False)
 
         except Exception as e:
+            print(e)
             raise e
 
     def upload_to_s3(self, data, s3_folder_path, media_filename):

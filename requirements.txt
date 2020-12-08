@@ -7,3 +7,4 @@ djangorestframework==3.12.1
 django-cors-headers==3.5.0
 requests~=2.22.0
 boto3==1.16.9
+coverage==5.3

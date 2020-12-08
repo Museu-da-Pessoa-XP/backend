@@ -4,6 +4,11 @@ The Museu da Pessoa backend is part of the Museu da Pessoa project and is respon
 
 [![Build Status](https://travis-ci.org/Museu-da-Pessoa-XP/backend.svg?branch=develop)](https://travis-ci.org/Museu-da-Pessoa-XP/backend)
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/4be19c9ecfaea10318d0/maintainability)](https://codeclimate.com/github/Museu-da-Pessoa-XP/backend/maintainability)
+
+[![Test Coverage](https://api.codeclimate.com/v1/badges/4be19c9ecfaea10318d0/test_coverage)](https://codeclimate.com/github/Museu-da-Pessoa-XP/backend/test_coverage)
+
+
 ## Install docker on Linux (ubuntu flavors)
 ```shell
 sudo apt-get update

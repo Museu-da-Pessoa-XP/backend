@@ -42,7 +42,6 @@ class UserView(APIView):
 
 
 class HistoriaView(APIView):
-    parser_classes = [MultiPartParser, FormParser]
 
     parser_classes = [MultiPartParser, FormParser]
 
@@ -76,7 +75,6 @@ class HistoriaView(APIView):
             return JsonResponse(serializer.data, status=status_code, safe=False)
 
         except Exception as e:
-            print(e)
             raise e
 
     def upload_to_s3(self, data, s3_folder_path, media_filename):

@@ -3,6 +3,6 @@ from . import models
 from . import serializers
 
 
-class HistoriaViewset(viewsets.ModelViewSet):
+class AppViewSet(viewsets.ModelViewSet):
     queryset = models.User.objects.all()
     serializer_class = serializers.HistoriaSerializer

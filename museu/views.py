@@ -1,3 +1,4 @@
+import json
 import boto3
 from django.http.response import JsonResponse
 from rest_framework import status
@@ -12,7 +13,6 @@ _S3 = boto3.resource('s3')
 _S3_client = boto3.client('s3')
 
 BASE_PATH = 'uploads/'
-
 
 class AppView(APIView):
     parser_classes = [MultiPartParser, FormParser]
@@ -31,6 +31,7 @@ class AppView(APIView):
 
             media_filename = data['title'] + '.' + media_filename_extension
             s3_folder_path = BASE_PATH + data['title'] + '/'
+
             status_code = self.upload_to_s3(data, s3_folder_path, media_filename)
             if not status.is_success(status_code):
                 return JsonResponse('error', status=status.HTTP_500_INTERNAL_SERVER_ERROR, safe=False)
@@ -50,7 +51,7 @@ class AppView(APIView):
         put_metadata = s3object.put(Body=(data['media']))
         response_code = put_metadata['ResponseMetadata']['HTTPStatusCode']
         return response_code
-
+      
     def save_tags(self, tags):
         tag_objs = []
         for tag in tags:

@@ -14,4 +14,3 @@ class HistoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Historia
         fields = ['title', 'description', 'type', 'media_url']
-

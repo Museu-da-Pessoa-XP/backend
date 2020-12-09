@@ -1,4 +1,3 @@
-
 import json
 import boto3
 from django.http.response import JsonResponse
@@ -7,42 +6,15 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 
 from backend.settings import AWS_STORAGE_BUCKET_NAME
-from museu.models import User, Historia
-from museu.serializers import UserSerializer, HistoriaSerializer
+from museu.models import User, Historia, Tag
+from museu.serializers import HistoriaSerializer
 
 _S3 = boto3.resource('s3')
 _S3_client = boto3.client('s3')
 
 BASE_PATH = 'uploads/'
-JSON_FILE_TYPE = '.json'
-TEXT_FILE_TYPE = '.txt'
-AUDIO_FILE_TYPE = '.mp3'
-VIDEO_FILE_TYPE = '.mp4'
 
-
-class UserView(APIView):
-
-    def get(self, request, format=None):
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
-
-    def post(self, request, format=None):
-        try:
-            data = json.loads(request.body)['data']
-
-            user = User.objects.create(
-                name=data["name"],
-                email=data["email"],
-            )
-            serializer = UserSerializer(user)
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, safe=False)
-        except Exception as e:
-            raise e
-
-
-class HistoriaView(APIView):
-
+class AppView(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def get(self, request, format=None):
@@ -64,12 +36,9 @@ class HistoriaView(APIView):
             if not status.is_success(status_code):
                 return JsonResponse('error', status=status.HTTP_500_INTERNAL_SERVER_ERROR, safe=False)
 
-            historia = Historia.objects.create(
-                title=data["title"],
-                description=data["description"],
-                type=data["type"],
-                media_url=s3_folder_path + media_filename
-            )
+            tag_objs = self.save_tags(data['tags'])
+            historia = self.save_historia(data['title'], data['type'], s3_folder_path + media_filename, tag_objs)
+            self.save_user(data['name'], data['email'], data['phone'])
 
             serializer = HistoriaSerializer(historia)
             return JsonResponse(serializer.data, status=status_code, safe=False)
@@ -82,3 +51,32 @@ class HistoriaView(APIView):
         put_metadata = s3object.put(Body=(data['media']))
         response_code = put_metadata['ResponseMetadata']['HTTPStatusCode']
         return response_code
+      
+    def save_tags(self, tags):
+        tag_objs = []
+        for tag in tags:
+            tag_obj = Tag.objects.create(tag=tag)
+            tag_obj.save()
+            tag_objs.append(tag_obj)
+        return tag_objs
+
+    def save_historia(self, title, historia_type, media_url, tags):
+        historia = Historia.objects.create(
+            title=title,
+            type=historia_type,
+            media_url=media_url
+        )
+        historia.save()
+        for tag in tags:
+            historia.tags.add(tag)
+        return historia
+
+    def save_user(self, name, email, telephone):
+        telephone = "".join([c if c.isdigit() else '' for c in telephone])
+
+        user = User.objects.create(
+            name=name,
+            email=email,
+            telephone=telephone
+        )
+        user.save()

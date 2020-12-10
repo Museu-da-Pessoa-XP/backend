@@ -4,7 +4,7 @@ from .models import User, Historia, Tag
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['name', 'email', 'telephone']
+        fields = ['name', 'email', 'phone']
 
 class HistoriaSerializer(serializers.ModelSerializer):
     class Meta:

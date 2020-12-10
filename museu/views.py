@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 from backend.settings import AWS_STORAGE_BUCKET_NAME
 from museu.models import User, Historia, Tag
-from museu.serializers import HistoriaSerializer
+from museu.serializers import HistoriaSerializer, UserSerializer
 
 _S3 = boto3.resource('s3')
 _S3_client = boto3.client('s3')
@@ -17,10 +17,11 @@ BASE_PATH = 'uploads/'
 class AppView(APIView):
     parser_classes = [MultiPartParser, FormParser]
 
+    # TODO: Missing return User
     def get(self, request, format=None):
         historias = Historia.objects.all()
-        serializer = HistoriaSerializer(historias, many=True)
-        return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
+        hist_data = HistoriaSerializer(historias, many=True).data
+        return JsonResponse(hist_data, status=status.HTTP_200_OK, safe=False)
 
     def post(self, request, format=None):
         try:
@@ -71,12 +72,12 @@ class AppView(APIView):
             historia.tags.add(tag)
         return historia
 
-    def save_user(self, name, email, telephone):
-        telephone = "".join([c if c.isdigit() else '' for c in telephone])
+    def save_user(self, name, email, phone):
+        phone = "".join([c if c.isdigit() else '' for c in phone])
 
         user = User.objects.create(
             name=name,
             email=email,
-            telephone=telephone
+            phone=phone
         )
         user.save()

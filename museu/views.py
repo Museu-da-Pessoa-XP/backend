@@ -55,7 +55,7 @@ class AppView(APIView):
       
     def save_tags(self, tags):
         tag_objs = []
-        for tag in tags:
+        for tag in tags.split(','):
             tag_obj = Tag.objects.create(tag=tag)
             tag_obj.save()
             tag_objs.append(tag_obj)

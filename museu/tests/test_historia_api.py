@@ -1,3 +1,4 @@
+
 import json
 import random
 from io import BytesIO
@@ -6,8 +7,8 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from museu.views import HistoriaView
-from museu.tests.utils import create_historias_data
+from museu.views import AppView
+from museu.tests.utils import *
 
 
 class HistoriaAPITestCase(TestCase):
@@ -16,28 +17,31 @@ class HistoriaAPITestCase(TestCase):
         self.historias = []
         num_historias = random.randint(10, 20)
 
-        file = BytesIO(b'Test File content')
-        file.seek(0)
-
-        titles, descriptions, types, media_urls = create_historias_data(num_historias)
-        for title, description, htype, media in zip(titles, descriptions, types, media_urls):
+        name, email, phone = create_users_data(num_historias)
+        titles, tags, types, media = create_historias_data(num_historias, is_model=False)
+        for title, htags, htype, media, name, email, phone in zip(titles, tags, types, media, name, email, phone):
             self.historias.append({
-                "title": title,
-                "description": description,
-                "type": htype,
-                "media": file
+                'name': name,
+                'email': email,
+                'phone': phone,
+                'title': title,
+                'tags': htags,
+                'type': htype,
+                'media': media,
             })
+
 
     def test_get(self):
         api_client = APIClient()
-        hv = HistoriaView()
+        view = AppView()
         for historia in self.historias:
             api_client.post('/historia/', data=historia, format='multipart')
 
-        historias = json.loads(hv.get('').content)
+        historias = json.loads(view.get('').content)
+
+        # TODO: missing assertEqual on tags, media and User
         for hist_from_get, hist_inserted in zip(historias, self.historias):
             self.assertEqual(hist_from_get['title'], hist_inserted['title'])
-            self.assertEqual(hist_from_get['description'], hist_inserted['description'])
             self.assertEqual(hist_from_get['type'], hist_inserted['type'])
 
     def test_post(self):

@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
 class HistoriaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Historia
-        fields = ['title', 'type', 'media_url', 'tags']
+        fields = ['user', 'title', 'type', 'media_url', 'tags']
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:

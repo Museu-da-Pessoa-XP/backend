@@ -1,5 +1,7 @@
 
 from django.db import models
+from django.db.models import DO_NOTHING
+
 from museu.validators import validate_historia_type
 USER_MAX_LENGTH = 30
 
@@ -29,3 +31,4 @@ class Historia(models.Model):
         default=''
     )
     tags = models.ManyToManyField(Tag)
+    user = models.ForeignKey(User, on_delete=DO_NOTHING, related_name='User', null=True)

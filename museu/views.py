@@ -38,8 +38,8 @@ class AppView(APIView):
                 return JsonResponse('error', status=status.HTTP_500_INTERNAL_SERVER_ERROR, safe=False)
 
             tag_objs = self.save_tags(data['tags'])
-            historia = self.save_historia(data['title'], data['type'], s3_folder_path + media_filename, tag_objs)
-            self.save_user(data['name'], data['email'], data['phone'])
+            user = self.save_user(data['name'], data['email'], data['phone'])
+            historia = self.save_historia(user, data['title'], data['type'], s3_folder_path + media_filename, tag_objs)
 
             serializer = HistoriaSerializer(historia)
             return JsonResponse(serializer.data, status=status_code, safe=False)
@@ -55,17 +55,18 @@ class AppView(APIView):
       
     def save_tags(self, tags):
         tag_objs = []
-        for tag in tags:
+        for tag in tags.split(','):
             tag_obj = Tag.objects.create(tag=tag)
             tag_obj.save()
             tag_objs.append(tag_obj)
         return tag_objs
 
-    def save_historia(self, title, historia_type, media_url, tags):
+    def save_historia(self, user, title, historia_type, media_url, tags):
         historia = Historia.objects.create(
+            user=user,
             title=title,
             type=historia_type,
-            media_url=media_url
+            media_url=media_url,
         )
         historia.save()
         for tag in tags:
@@ -81,3 +82,4 @@ class AppView(APIView):
             phone=phone
         )
         user.save()
+        return user

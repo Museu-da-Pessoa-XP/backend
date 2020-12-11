@@ -20,7 +20,7 @@ def get_random_number(length):
     return result_number
 
 
-def create_historias_data(num_historias=10, string_length=30, num_tags=5, is_model=True):
+def create_historias_data(num_historias=10, string_length=24, num_tags=5, is_model=True):
     titles = [TEST_PATH + get_random_string(string_length) for i in range(num_historias)]
     tags = [[get_random_string(string_length) for j in range(num_tags)] \
             for i in range(num_historias)]

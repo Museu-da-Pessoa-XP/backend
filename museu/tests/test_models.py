@@ -1,4 +1,3 @@
-
 from django.test import TestCase
 from setuptools.command.test import test
 
@@ -8,36 +7,44 @@ from museu.tests.utils import *
 
 class ModelsTestCase(TestCase):
 
+    def __init__(self, methodName: str = ...):
+        super().__init__(methodName)
+        self.user = None
+
     def setUp(self):
-        string_length = random.randint(1, 30)
+        string_length = random.randint(1, 24)
         num_historias = random.randint(10, 20)
 
         # Historia parameters
+        self.name, self.email, self.phone = create_users_data(num_historias, string_length)
         self.historia_titles, self.historia_tags, self.historia_types, self.historia_media_url \
             = create_historias_data(num_historias, string_length)
 
-        self.name, self.email, self.phone = create_users_data(num_historias, string_length)
-
-        for title, htags, htype, media_url in zip(self.historia_titles, self.historia_tags,
-                                                  self.historia_types, self.historia_media_url):
-            hist = Historia.objects.create(title=title, type=htype, media_url=media_url)
-            hist.tags.add(*save_tags(htags))
-
-        for name, email, phone in zip(self.name, self.email, self.phone):
-            User.objects.create(name=name, email=email, phone=phone)
-
+        for name, email, phone, title, htags, htype, media_url in zip(
+                self.name, self.email, self.phone,
+                self.historia_titles, self.historia_tags,
+                self.historia_types, self.historia_media_url):
+            user = User.objects.create(name=name, email=email, phone=phone)
+            historia = Historia.objects.create(user=user, title=title, type=htype, media_url=media_url)
+            historia.tags.add(*save_tags(htags))
 
     def test_historia_model(self):
         historias_created = Historia.objects.all()
         historias = []
 
-        for title, htags, htype, media_url in zip(self.historia_titles, self.historia_tags,
-                                                        self.historia_types, self.historia_media_url):
-            hist = Historia.objects.create(title=title,type=htype, media_url=media_url)
-            hist.tags.add(*save_tags(htags))
-            historias.append(hist)
+        for name, email, phone, title, htags, htype, media_url in zip(
+                self.name, self.email, self.phone,
+                self.historia_titles, self.historia_tags,
+                self.historia_types, self.historia_media_url):
+            user = User.objects.create(name=name, email=email, phone=phone)
+            historia = Historia.objects.create(user=user, title=title, type=htype, media_url=media_url)
+            historia.tags.add(*save_tags(htags))
+            historias.append(historia)
 
         for i in range(len(historias)):
+            # self.assertEqual(historias[i].user.name, historias_created[i].user.name)
+            # self.assertEqual(historias[i].user.email, historias_created[i].user.email)
+            # self.assertEqual(historias[i].user.phone, historias_created[i].user.phone)
             self.assertEqual(historias[i].title, historias_created[i].title)
             self.assertEqual(list(historias[i].tags.values_list('tag')),
                              list(historias_created[i].tags.values_list('tag')))
@@ -49,7 +56,7 @@ class ModelsTestCase(TestCase):
         users = []
 
         for name, email, phone in zip(self.name, self.email, self.phone):
-            usr = User.objects.create(name=name,email=email, phone=phone)
+            usr = User.objects.create(name=name, email=email, phone=phone)
             users.append(usr)
 
         for i in range(len(users)):

@@ -29,7 +29,8 @@ class ModelsTestCase(TestCase):
             historia.tags.add(*save_tags(htags))
 
     def test_historia_model(self):
-        historias_created = Historia.objects.all()
+        historias_created = Historia.objects.all().order_by('title').distinct('title')
+
         historias = []
 
         for name, email, phone, title, htags, htype, media_url in zip(
@@ -41,23 +42,29 @@ class ModelsTestCase(TestCase):
             historia.tags.add(*save_tags(htags))
             historias.append(historia)
 
+        historias.sort(key=lambda x: x.title)
+
         for i in range(len(historias)):
-            # self.assertEqual(historias[i].user.name, historias_created[i].user.name)
-            # self.assertEqual(historias[i].user.email, historias_created[i].user.email)
-            # self.assertEqual(historias[i].user.phone, historias_created[i].user.phone)
+            self.assertEqual(historias[i].user.name, historias_created[i].user.name)
+            self.assertEqual(historias[i].user.email, historias_created[i].user.email)
+            self.assertEqual(historias[i].user.phone, historias_created[i].user.phone)
             self.assertEqual(historias[i].title, historias_created[i].title)
             self.assertEqual(list(historias[i].tags.values_list('tag')),
                              list(historias_created[i].tags.values_list('tag')))
             self.assertEqual(historias[i].type, historias_created[i].type)
             self.assertEqual(historias[i].media_url, historias_created[i].media_url)
 
+
+
     def test_user_model(self):
-        users_created = User.objects.all()
+        users_created = User.objects.all().order_by('name').distinct('name')
         users = []
 
         for name, email, phone in zip(self.name, self.email, self.phone):
             usr = User.objects.create(name=name, email=email, phone=phone)
             users.append(usr)
+
+        users.sort(key=lambda x: x.name)
 
         for i in range(len(users)):
             self.assertEqual(users[i].name, users_created[i].name)

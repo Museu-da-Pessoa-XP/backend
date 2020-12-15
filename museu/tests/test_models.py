@@ -64,7 +64,7 @@ class ModelsTestCase(TestCase):
             usr = User.objects.create(name=name, email=email, phone=phone)
             users.append(usr)
 
-        users = sorted(users, key=lambda x: x.name)
+        users.sort(key=lambda x: x.name)
 
         for i in range(len(users)):
             self.assertEqual(users[i].name, users_created[i].name)

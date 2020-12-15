@@ -1,4 +1,3 @@
-import boto3
 from django.http.response import JsonResponse
 from rest_framework import status
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -7,6 +6,8 @@ from rest_framework.views import APIView
 from backend.settings import AWS_STORAGE_BUCKET_NAME
 from museu.models import User, Historia, Tag
 from museu.serializers import HistoriaSerializer
+
+import boto3
 
 _S3 = boto3.resource('s3')
 _S3_client = boto3.client('s3')

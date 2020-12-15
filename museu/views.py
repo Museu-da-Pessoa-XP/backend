@@ -29,8 +29,9 @@ class AppView(APIView):
             data = request.data
             media_filename_extension = data['media'].content_type.split('/')[1]
             if len(media_filename_extension) <= 1:
+                status_error = status.HTTP_500_INTERNAL_SERVER_ERROR
                 return JsonResponse('file is empty',
-                                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                    status=status_error,
                                     safe=False)
 
             media_filename = data['title'] + '.' + media_filename_extension
@@ -41,8 +42,9 @@ class AppView(APIView):
                                             media_filename)
 
             if not status.is_success(status_code):
+                status_error = status.HTTP_500_INTERNAL_SERVER_ERROR
                 return JsonResponse('error',
-                                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                    status=status_error,
                                     safe=False)
 
             tag_objs = self.save_tags(data['tags'])

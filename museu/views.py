@@ -47,10 +47,13 @@ class AppView(APIView):
             tag_objs = self.save_tags(data['tags'])
             user = self.save_user(data['name'], data['email'], data['phone'])
             historia = self.save_historia(user, data['title'], data['type'],
-                                          s3_folder_path + media_filename, tag_objs)
+                                          s3_folder_path + media_filename,
+                                          tag_objs)
 
             serializer = HistoriaSerializer(historia)
-            return JsonResponse(serializer.data, status=status_code, safe=False)
+            return JsonResponse(serializer.data,
+                                status=status_code,
+                                safe=False)
 
         except Exception as error:
             raise error

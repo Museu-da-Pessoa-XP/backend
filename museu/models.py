@@ -34,4 +34,5 @@ class Historia(models.Model):
         default=''
     )
     tags = models.ManyToManyField(Tag)
-    user = models.ForeignKey(User, on_delete=DO_NOTHING, related_name='User', null=True)
+    user = models.ForeignKey(User, on_delete=DO_NOTHING,
+                             related_name='User', null=True)

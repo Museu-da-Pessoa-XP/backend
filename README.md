@@ -23,7 +23,15 @@ git checkout develop
 git pull
 ```
 
-## Start the Postgres and PGAdmin
+## Export necessary variables
+Its essential to export AWS keys for being able to connect to the S3 bucket. Also, Django needs its secret key to work inside the container:
+```shell
+export DJANGO_SECRET_KEY=xxxxxxxxx
+export AWS_ACCESS_KEY_ID=xxxxxxxxx
+export AWS_SECRET_ACCESS_KEY=xxxxxxxx
+```
+
+## Start the Django, Postgres and PGAdmin
 ```shell
 docker-compose up -d
 ```
